@@ -18,7 +18,7 @@ class TodoLayout extends StatefulWidget {
 
 class _TodoLayoutState extends State<TodoLayout> {
   final drawerController = ZoomDrawerController();
-  MenuItemDetails currentItem = MenuItem.home;
+  MenuItemDetails currentItem = MenuItems.home;
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +30,9 @@ class _TodoLayoutState extends State<TodoLayout> {
           return ZoomDrawer(
             style: DrawerStyle.defaultStyle,
             menuScreen: Builder(
-              builder: (context)=> MenuScreen(
+              builder: (context) => MenuScreen(
                 currentItem: currentItem,
-                onSelectedItem: (item){
+                onSelectedItem: (item) {
                   setState(() {
                     currentItem = item;
                     ZoomDrawer.of(context)!.close();
@@ -42,33 +42,35 @@ class _TodoLayoutState extends State<TodoLayout> {
             ),
             mainScreen: getScreen(),
             controller: drawerController,
-
             borderRadius: 24.0,
             showShadow: true,
             angle: 0.0,
             drawerShadowsBackgroundColor: Colors.grey,
             slideWidth: MediaQuery.of(context).size.width * 0.55,
             openCurve: Curves.fastOutSlowIn,
-            menuBackgroundColor: Color(0xff274472)/*0xff5860db*/,
+            menuBackgroundColor: Color(0xff274472) /*0xff5860db*/,
           );
         },
-
       ),
     );
   }
 
-  Widget getScreen(){
-    if(currentItem == MenuItem.home)
+  Widget getScreen() {
+    if (currentItem == MenuItems.home)
       return MainScreen(drawerController);
-    else if(currentItem == MenuItem.archive)
-      return ArchivedTasksScreen(drawerController: drawerController,);
-    else if(currentItem == MenuItem.allTasks)
-      return AllTasksScreen(drawerController: drawerController,);
-    else if(currentItem == MenuItem.calendar)
-      return CalendarScreen(drawerController: drawerController,);
+    else if (currentItem == MenuItems.archive)
+      return ArchivedTasksScreen(
+        drawerController: drawerController,
+      );
+    else if (currentItem == MenuItems.allTasks)
+      return AllTasksScreen(
+        drawerController: drawerController,
+      );
+    else if (currentItem == MenuItems.calendar)
+      return CalendarScreen(
+        drawerController: drawerController,
+      );
     else
       return SettingsScreen();
   }
 }
-
-

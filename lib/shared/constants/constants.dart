@@ -6,3 +6,7 @@ List<Map> doneTasks = [];
 List<Map> selectedTasks = [];
 List<Map> archivedTasks = [];
 Database? database;
+DateTime? taskDate;
+int? taskHours;
+int? taskMinutes;
+

@@ -1,3 +1,4 @@
+import 'package:final_todo2/Notifications/LocalNotifications.dart';
 import 'package:final_todo2/modules/layout/NavigationDrawer.dart';
 import 'package:final_todo2/shared/components/components.dart';
 import 'package:final_todo2/shared/constants/constants.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_zoom_drawer/config.dart';
 import 'package:intl/intl.dart';
+import 'dart:math';
 
 class MainScreen extends StatefulWidget {
   final ZoomDrawerController drawerController;
@@ -19,7 +21,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  var  scaffoldKey = GlobalKey<ScaffoldState>();
+  var scaffoldKey = GlobalKey<ScaffoldState>();
 
   var formKey = GlobalKey<FormState>();
 
@@ -29,10 +31,20 @@ class _MainScreenState extends State<MainScreen> {
 
   var dateController = TextEditingController();
 
+  late final LocalNotificationService service;
+
+  @override
+  void initState() {
+    service = LocalNotificationService();
+    service.intialize();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => AppCubit()
+      create: (BuildContext context) =>
+      AppCubit()
         ..createDatabase()
         ..setSelectedDate(DateTime.now()),
       child: BlocConsumer<AppCubit, AppStates>(
@@ -47,19 +59,26 @@ class _MainScreenState extends State<MainScreen> {
             key: scaffoldKey,
             appBar: AppBar(
               actions: [
-                DateFormat.yMd().format(AppCubit.get(context).selectedDay) != DateFormat.yMd().format(DateTime.now())
+                TextButton(onPressed: (){
+                  print(taskDate);
+                }, child: Text("TEST", style: TextStyle(color: Colors.white),)),
+                DateFormat.yMd().format(AppCubit
+                    .get(context)
+                    .selectedDay) !=
+                    DateFormat.yMd().format(DateTime.now())
                     ? TextButton(
-                        onPressed: () {
-                          AppCubit.get(context).goToToday();
-                        },
-                        child: const Text(
-                          "TODAY",
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                        ))
+                    onPressed: () {
+                      AppCubit.get(context).goToToday();
+                    },
+                    child: const Text(
+                      "TODAY",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ))
                     : Container()
               ],
               leading: IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.menu,
                   size: 30,
                 ),
@@ -67,7 +86,10 @@ class _MainScreenState extends State<MainScreen> {
                   widget.drawerController.toggle?.call();
                 },
               ),
-              toolbarHeight: MediaQuery.of(context).size.height * 0.1,
+              toolbarHeight: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.1,
               title: const Text(
                 "ToDo",
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
@@ -75,24 +97,40 @@ class _MainScreenState extends State<MainScreen> {
             ),
             body: state is TodoAppLoadingState
                 ? const Center(
-                    child: CircularProgressIndicator(
-                    color: Colors.white,
-                  ))
-                : AppCubit.get(context)
-                    .screens[AppCubit.get(context).currentIndex],
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ))
+                : AppCubit
+                .get(context)
+                .screens[AppCubit
+                .get(context)
+                .currentIndex],
             floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerDocked,
+            FloatingActionButtonLocation.centerDocked,
             floatingActionButton: FloatingActionButton(
               onPressed: () {
-                if (AppCubit.get(context).isBottomSheetShown) {
+                if (AppCubit
+                    .get(context)
+                    .isBottomSheetShown) {
                   if (formKey.currentState!.validate()) {
                     AppCubit.get(context)
                         .insertToDatabase(
                       title: titleController.text,
                       time: timeController.text,
                       date: dateController.text,
-                    )
-                        .then((value) {
+                    ).then((value) async {
+
+                      await service.showScheduledNotification(
+                          id: 1,
+                          title: 'Task',
+                          body: 'You have a task now',
+                          date: taskDate!,
+                          minutes: taskMinutes!,
+                        hours: taskHours!,
+                      ).then((value){
+                        print("DONE");
+                      });
+
                       titleController.text = "";
                       timeController.text = "";
                       dateController.text = "";
@@ -110,69 +148,74 @@ class _MainScreenState extends State<MainScreen> {
                 } else {
                   scaffoldKey.currentState!
                       .showBottomSheet(
-                          (context) => Container(
-                                color: Colors.white,
-                                padding: EdgeInsets.all(20.0),
-                                child: Form(
-                                  key: formKey,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      textFormField(
-                                        controller: titleController,
-                                        label: "Task Title",
-                                        validation: "Enter your title please",
-                                        type: TextInputType.text,
-                                        prefixIcon: Icons.title_sharp,
-                                      ),
-                                      const SizedBox(
-                                        height: 10.0,
-                                      ),
-                                      textFormField(
-                                          controller: timeController,
-                                          label: "Task Time",
-                                          validation: "Enter your time please",
-                                          type: TextInputType.none,
-                                          prefixIcon:
-                                              Icons.watch_later_outlined,
-                                          onTap: () {
-                                            showTimePicker(
-                                                    context: context,
-                                                    initialTime:
-                                                        TimeOfDay.now())
-                                                .then((value) {
-                                              timeController.text = value!
-                                                  .format(context)
-                                                  .toString();
-                                            });
-                                          }),
-                                      const SizedBox(
-                                        height: 10.0,
-                                      ),
-                                      textFormField(
-                                        controller: dateController,
-                                        label: "Date Title",
-                                        onTap: () {
-                                          showDatePicker(
-                                                  context: context,
-                                                  initialDate: DateTime.now(),
-                                                  firstDate: DateTime.now(),
-                                                  lastDate: DateTime.parse(
-                                                      '2024-05-03'))
-                                              .then((value) {
-                                            dateController.text =
-                                                DateFormat.yMd().format(value!);
-                                          });
-                                        },
-                                        validation: "Enter your date please",
-                                        type: TextInputType.none,
-                                        prefixIcon: IconBroken.Calendar,
-                                      ),
-                                    ],
+                          (context) =>
+                          Container(
+                            color: Colors.white,
+                            padding: EdgeInsets.all(20.0),
+                            child: Form(
+                              key: formKey,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  textFormField(
+                                    controller: titleController,
+                                    label: "Task Title",
+                                    validation: "Enter your title please",
+                                    type: TextInputType.text,
+                                    prefixIcon: Icons.title_sharp,
                                   ),
-                                ),
+                                  const SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  textFormField(
+                                      controller: timeController,
+                                      label: "Task Time",
+                                      validation: "Enter your time please",
+                                      type: TextInputType.none,
+                                      prefixIcon:
+                                      Icons.watch_later_outlined,
+                                      onTap: () {
+                                        showTimePicker(
+                                            context: context,
+                                            initialTime:
+                                            TimeOfDay.now())
+                                            .then((value) {
+
+                                              taskHours = value!.hour;
+                                              taskMinutes = value.minute;
+                                          timeController.text = value
+                                              .format(context)
+                                              .toString();
+                                        });
+                                      }),
+                                  const SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  textFormField(
+                                    controller: dateController,
+                                    label: "Date Title",
+                                    onTap: () {
+                                      showDatePicker(
+                                          context: context,
+                                          initialDate: DateTime.now(),
+                                          firstDate: DateTime.now(),
+                                          lastDate: DateTime.parse(
+                                              '2024-05-03'))
+                                          .then((value) {
+                                            taskDate = value!;
+                                        dateController.text =
+                                            DateFormat.yMd().format(value);
+                                      });
+                                    },
+                                    validation: "Enter your date please",
+                                    type: TextInputType.none,
+                                    prefixIcon: IconBroken.Calendar,
+                                  ),
+                                ],
                               ),
-                          elevation: 20.0)
+                            ),
+                          ),
+                      elevation: 20.0)
                       .closed
                       .then((value) {
                     AppCubit.get(context).changeBotSheet(
@@ -187,7 +230,9 @@ class _MainScreenState extends State<MainScreen> {
                 // AppCubit.get(context).bottomSheet(context: context, key: scaffoldKey, formKey: formKey);
               },
               child: Icon(
-                AppCubit.get(context).fabIcon,
+                AppCubit
+                    .get(context)
+                    .fabIcon,
                 color: Colors.white,
               ),
               shape: const StadiumBorder(
@@ -202,7 +247,9 @@ class _MainScreenState extends State<MainScreen> {
                 onTap: (index) {
                   AppCubit.get(context).changeBottomNavigationBar(index);
                 },
-                currentIndex: AppCubit.get(context).currentIndex,
+                currentIndex: AppCubit
+                    .get(context)
+                    .currentIndex,
                 elevation: 0.0,
                 items: const [
                   BottomNavigationBarItem(
