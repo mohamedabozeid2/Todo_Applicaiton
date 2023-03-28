@@ -1,16 +1,22 @@
-# final_todo2
+# Todo Application
 
-A new Flutter project.
+It is an application to create tasks with a reminder for each task with notifications; you can change the status of every job if you finish this task or you want to put it in the archive to keep it for memory; you can find a calendar to display the tasks depends on the date of tasks.
 
-## Getting Started
+#
 
-This project is a starting point for a Flutter application.
+![Screenshot_2023-03-28-16-12-15-889_com example final_todo2](https://user-images.githubusercontent.com/52718382/228266726-1cd14489-9b6c-48fd-a633-5c78fe75adbf.jpg)
 
-A few resources to get you started if this is your first Flutter project:
+#
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+![Screenshot_2023-03-28-16-12-51-482_com example final_todo2](https://user-images.githubusercontent.com/52718382/228266845-97082384-dfc7-4408-82db-ac2773fcef26.jpg)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+#
+
+![Screenshot_2023-03-28-16-12-32-363_com example final_todo2](https://user-images.githubusercontent.com/52718382/228267315-89bfa1c4-e9aa-42ef-a510-f2aae9c928d8.jpg)
+
+#
+
+![Screenshot_2023-03-28-16-15-24-965_com example final_todo2](https://user-images.githubusercontent.com/52718382/228267354-42061122-ae48-49c5-921b-aa89cfbae3c0.jpg)
+
+#
+
