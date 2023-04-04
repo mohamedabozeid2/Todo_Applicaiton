@@ -4,19 +4,19 @@ It is an application to create tasks with a reminder for each task with notifica
 
 #
 
-![Screenshot_2023-03-28-16-12-15-889_com example final_todo2](https://user-images.githubusercontent.com/52718382/228266726-1cd14489-9b6c-48fd-a633-5c78fe75adbf.jpg)
+![screen_1](https://user-images.githubusercontent.com/52718382/229699790-8e88ae5d-c0f8-4f47-b1e7-8fb1d470717d.png)
 
 #
 
-![Screenshot_2023-03-28-16-12-51-482_com example final_todo2](https://user-images.githubusercontent.com/52718382/228266845-97082384-dfc7-4408-82db-ac2773fcef26.jpg)
+![screen_2](https://user-images.githubusercontent.com/52718382/229699858-7569fe4b-4063-4083-be47-cdda0ad08d6f.png)
 
 #
 
-![Screenshot_2023-03-28-16-12-32-363_com example final_todo2](https://user-images.githubusercontent.com/52718382/228267315-89bfa1c4-e9aa-42ef-a510-f2aae9c928d8.jpg)
+![screen_3](https://user-images.githubusercontent.com/52718382/229699875-f53a0bc9-28a1-4d89-9d33-d64c20aee235.png)
 
 #
 
-![Screenshot_2023-03-28-16-15-24-965_com example final_todo2](https://user-images.githubusercontent.com/52718382/228267354-42061122-ae48-49c5-921b-aa89cfbae3c0.jpg)
+![screen_4](https://user-images.githubusercontent.com/52718382/229699881-8fc24013-c6b7-4b65-a777-2fd32ffc6d8d.png)
 
 #
 
